@@ -1,0 +1,26 @@
+name: "Terraform Check"
+
+# This tells GitHub to run the script every time you push code
+on: [push]
+
+jobs:
+  terraform-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: 1. Terraform Format (Check style)
+        run: terraform fmt -check
+
+      - name: 2. Terraform Init (Install plugins)
+        run: terraform init
+
+      - name: 3. Terraform Validate (Check syntax)
+        run: terraform validate
+
+      - name: 4. Terraform Plan (Preview changes)
+        run: terraform plan
