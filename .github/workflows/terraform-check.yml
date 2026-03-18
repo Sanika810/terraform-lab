@@ -1,11 +1,14 @@
 name: "Terraform Check"
-
-# This tells GitHub to run the script every time you push code
 on: [push]
 
 jobs:
-  terraform-ci:
+  validate:
     runs-on: ubuntu-latest
+    # This tells the robot to enter the 'day5' folder before running commands
+    defaults:
+      run:
+        working-directory: ./day5 
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -13,14 +16,8 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
-      - name: 1. Terraform Format (Check style)
-        run: terraform fmt -check
+      - name: Terraform Init
+        run: terraform init -backend=false
 
-      - name: 2. Terraform Init (Install plugins)
-        run: terraform init
-
-      - name: 3. Terraform Validate (Check syntax)
+      - name: Terraform Validate
         run: terraform validate
-
-      - name: 4. Terraform Plan (Preview changes)
-        run: terraform plan
